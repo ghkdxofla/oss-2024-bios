@@ -1,6 +1,5 @@
-import os
+# cromwell_runner/validator.py
 import subprocess
-
 
 def validate_wdl(wdl_file, cromwell_jar="cromwell.jar"):
     """
@@ -15,7 +14,7 @@ def validate_wdl(wdl_file, cromwell_jar="cromwell.jar"):
             ["java", "-jar", cromwell_jar, "validate", wdl_file],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
+            text=True
         )
 
         if result.returncode == 0:
@@ -30,19 +29,3 @@ def validate_wdl(wdl_file, cromwell_jar="cromwell.jar"):
     except Exception as e:
         print(f"An error occurred during validation: {str(e)}")
         return False
-
-
-# Example usage
-if __name__ == "__main__":
-    # Set the path to your WDL file and Cromwell JAR file
-    wdl_file = "../wdls/covid_test.wdl"
-    cromwell_jar = "../cromwell/cromwell.jar"
-
-    if os.path.exists(wdl_file):
-        is_valid = validate_wdl(wdl_file, cromwell_jar)
-        if is_valid:
-            print("The WDL file is valid.")
-        else:
-            print("The WDL file is not valid.")
-    else:
-        print(f"WDL file {wdl_file} does not exist.")
