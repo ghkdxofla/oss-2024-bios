@@ -3,24 +3,20 @@ version 1.0
 workflow CoronavirusAnalysis {
 
   input {
-    File fasta_file
-    File sequence_length_script
-    File gc_content_script
+    File fasta_file = "data/coronavirus.fasta"
   }
 
   call SequenceLength {
     input:
-      fasta_file = fasta_file,
-      script = sequence_length_script
+      fasta_file = fasta_file
   }
 
   call GCContent {
     input:
-      fasta_file = fasta_file,
-      script = gc_content_script
+      fasta_file = fasta_file
   }
 
-  output {
+  output{
     Int total_length = SequenceLength.total_length
     File gc_content_file = GCContent.output_file
   }
@@ -29,30 +25,28 @@ workflow CoronavirusAnalysis {
 task SequenceLength {
   input {
     File fasta_file
-    File script
   }
 
   command {
-    python3 ${script} ${fasta_file}
+    python3 sequence_length.py {fasta_file}
   }
 
   output {
-    Int total_length = read_int("output_length.txt")
+    Int total_length = read_int(stdout())
   }
 
   runtime {
-    docker: "python:3.9-slim"
+    docker: "biopython/biopython:latest"
   }
 }
 
 task GCContent {
   input {
     File fasta_file
-    File script
   }
 
   command {
-    python3 ${script} ${fasta_file}
+    python3 gc_content.py {fasta_file}
   }
 
   output {
@@ -60,6 +54,6 @@ task GCContent {
   }
 
   runtime {
-    docker: "python:3.9-slim"
+    docker: "biopython/biopython:latest"
   }
 }
