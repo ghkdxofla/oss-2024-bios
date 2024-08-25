@@ -2,7 +2,6 @@ import os
 
 import requests
 from dotenv import load_dotenv
-
 from utils import convert_paths
 
 # .env 파일에서 환경 변수 로드
