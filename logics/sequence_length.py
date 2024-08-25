@@ -2,10 +2,15 @@ import sys
 
 from Bio import SeqIO
 
-fasta_file = sys.argv[1]
-total_length = 0
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python sequence_length.py <fasta_file>")
+        sys.exit(1)
 
-for record in SeqIO.parse(fasta_file, "fasta"):
-    total_length += len(record.seq)
+    fasta_file = sys.argv[1]
+    total_length = 0
 
-print(total_length)
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        total_length += len(record.seq)
+
+    print(total_length)
