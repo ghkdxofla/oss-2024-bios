@@ -1,0 +1,5 @@
+{
+  "CoronavirusAnalysis.fasta_file": "data/coronavirus.fasta",
+  "CoronavirusAnalysis.gc_content_script": "logics/gc_content.py",
+  "CoronavirusAnalysis.sequence_length_script": "logics/sequence_length.py"
+}

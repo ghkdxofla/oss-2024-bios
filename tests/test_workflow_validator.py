@@ -13,4 +13,3 @@ def test_validate_workflow__when__using_invalid_wdl__expect__false():
 
     success, message = validate_wdl(wdl_file)
     assert success is False
-

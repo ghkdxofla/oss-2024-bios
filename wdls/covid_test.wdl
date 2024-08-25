@@ -1,6 +1,9 @@
 version 1.0
 
 workflow CoronavirusAnalysis {
+  String fasta_file
+  String sequence_length_script
+  String gc_content_script
 
   input {
     File fasta_file
@@ -33,7 +36,7 @@ task SequenceLength {
   }
 
   command {
-    python3 ${script} ${fasta_file}
+    python3 <<sequence_length>> fasta_file
   }
 
   output {
@@ -52,7 +55,7 @@ task GCContent {
   }
 
   command {
-    python3 ${script} ${fasta_file}
+    python3 <<gc_content>> fasta_file
   }
 
   output {
