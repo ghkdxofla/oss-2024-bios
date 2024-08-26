@@ -1,5 +1,7 @@
 {
   "CoronavirusAnalysis.fasta_file": "data/coronavirus.fasta",
   "CoronavirusAnalysis.gc_content_script": "logics/gc_content.py",
-  "CoronavirusAnalysis.sequence_length_script": "logics/sequence_length.py"
+  "CoronavirusAnalysis.sequence_length_script": "logics/sequence_length.py",
+  "CoronavirusAnalysis.pipfile": "logics/Pipfile",
+  "CoronavirusAnalysis.pipfile_lock": "logics/Pipfile.lock"
 }

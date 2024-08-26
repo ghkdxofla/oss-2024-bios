@@ -13,4 +13,5 @@ if __name__ == "__main__":
     for record in SeqIO.parse(fasta_file, "fasta"):
         total_length += len(record.seq)
 
-    print(total_length)
+    with open("sequence_length.txt", "w") as f:
+        f.write(str(total_length))
