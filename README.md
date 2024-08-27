@@ -4,6 +4,28 @@
 ## Bios?
 Bios는 Bio-Informatics Open-source Software의 약자로, 생물정보학 분야에서 사용되는 워크플로우를 관리하고 실행하는 엔진과 분석을 통합 관리하는 라이브러리 입니다. Bios는 사용자가 작성한 WDL(Workflow Description Language) 스크립트를 해석하고 실행하여 워크플로우를 관리합니다.
 
+## Project Architecture
+### Sequence Diagram
+```mermaid
+sequenceDiagram
+    participant User as Bioinformatician
+    participant WDL as WDL File
+    participant Server as WDL Server
+    participant Manager as Bios Manager
+    participant Visualizer as Visualization Tool
+
+    User->>WDL: Bioinformatic Data 입력
+    User->>WDL: 정의된 wdl file 열기
+    User->>WDL: wdl과 wdl에 필요한 Input options 정의
+    User->>Server: Workflow가 동작할 wdl 서버 지정
+    User->>Manager: Bios Manager 인스턴스 생성
+    Manager->>WDL: 정의한 wdl workflow에 맞게 job 실행
+    WDL->>Server: Job 실행
+    Server->>Manager: 생성된 결과 파일 출력
+    Manager->>Visualizer: 결과 파일을 사용하여 시각화
+    Visualizer->>User: 시각화 결과 표시
+```
+
 ## Project Structure
 ```
 Bios
