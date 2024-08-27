@@ -28,7 +28,7 @@ workflow CoronavirusAnalysis {
   call CombineResults {
     input:
       sequence_length_file = SequenceLength.output_file,
-      gc_content_file = GCContent.output_file
+      gc_content_file = GCContent.output_file,
   }
 
   output {
@@ -49,7 +49,7 @@ task SequenceLength {
     cp ${pipfile} Pipfile
     cp ${pipfile_lock} Pipfile.lock
     pipenv install --deploy --ignore-pipfile
-    pipenv run python ${script} ${fasta_file}
+    pipenv run python ${script} ${fasta_file} > sequence_length.txt
   }
 
   output {
@@ -74,7 +74,7 @@ task GCContent {
     cp ${pipfile} Pipfile
     cp ${pipfile_lock} Pipfile.lock
     pipenv install --deploy --ignore-pipfile
-    pipenv run python ${script} ${fasta_file}
+    pipenv run python ${script} ${fasta_file} > gc_content.txt
   }
 
   output {
