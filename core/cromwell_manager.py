@@ -69,12 +69,3 @@ class CromwellManager:
             raise Exception(f"Failed to abort workflow: {result.text}")
 
         return result.json()
-
-
-if __name__ == "__main__":
-    wdl_file = "wdls/covid_test_injected.wdl"
-    input_files = "wdls/inputs_covid_test.json"
-    cromwell_manager = CromwellManager()
-    cromwell_manager.authenticate()
-    result = cromwell_manager.submit_workflow(wdl_file, input_files)
-    print(result)
