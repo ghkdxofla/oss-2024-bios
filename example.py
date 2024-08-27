@@ -27,6 +27,9 @@ if __name__ == "__main__":
 
     # validate wdl
     validate_wdl(wdl_file)
+    if not validate_wdl(wdl_file):
+        print("WDL is not valid")
+        exit(1)
 
     # initiate manager
     manager = Manager(CromwellManager())
