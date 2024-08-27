@@ -4,6 +4,7 @@ from core.manager import Manager
 from core.managers.cromwell_manager import CromwellManager
 from core.visualizer import visualize_gc_content
 from core.workflow_validator import validate_wdl
+from utils import make_absolute_path
 
 if __name__ == "__main__":
     # prepare files
@@ -18,7 +19,7 @@ if __name__ == "__main__":
         "CoronavirusAnalysis.pipfile_lock": "logics/Pipfile.lock",
     }
     options = {
-        "final_workflow_outputs_dir": "/Users/taelim.hwang/Project/oss-2024-bios",
+        "final_workflow_outputs_dir": make_absolute_path("outputs"),
         "use_relative_output_paths": True,
     }
 
