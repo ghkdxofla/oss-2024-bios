@@ -25,9 +25,9 @@ if __name__ == "__main__":
         "use_relative_output_paths": True,
     }
 
-
     # validate wdl
     validate_wdl(wdl_file)
+
     # initiate manager
     manager = Manager(CromwellManager())
     manager.authenticate()
@@ -44,4 +44,4 @@ if __name__ == "__main__":
         sleep(5)
 
     # visualize gc content
-    visualize_gc_content(output_file)
+    visualize_gc_content(f"outputs/{output_file}")
