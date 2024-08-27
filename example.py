@@ -8,15 +8,17 @@ from utils import make_absolute_path
 
 if __name__ == "__main__":
     # prepare files
-    wdl_file = "wdls/covid_final.wdl"
-    input_files = "wdls/inputs_covid_test.json"
+    wdl_file = "wdls/covid_analysis.wdl"
+    output_file = "output_file.txt"
 
+    # input options
     input_options = {
         "CoronavirusAnalysis.fasta_file": "data/coronavirus.fasta",
         "CoronavirusAnalysis.gc_content_script": "logics/gc_content.py",
         "CoronavirusAnalysis.sequence_length_script": "logics/sequence_length.py",
         "CoronavirusAnalysis.pipfile": "logics/Pipfile",
         "CoronavirusAnalysis.pipfile_lock": "logics/Pipfile.lock",
+        "CoronavirusAnalysis.output_file": output_file,
     }
     options = {
         "final_workflow_outputs_dir": make_absolute_path("outputs"),
@@ -40,5 +42,6 @@ if __name__ == "__main__":
         result = manager.get_workflow_status(submit_result["id"])
         print(result)
         sleep(5)
+
     # visualize gc content
-    visualize_gc_content("gc_content.txt")
+    visualize_gc_content(output_file)

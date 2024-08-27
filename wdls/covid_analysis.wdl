@@ -7,6 +7,7 @@ workflow CoronavirusAnalysis {
     File gc_content_script
     File pipfile
     File pipfile_lock
+    String output_file
   }
 
   call SequenceLength {
@@ -29,6 +30,7 @@ workflow CoronavirusAnalysis {
     input:
       sequence_length_file = SequenceLength.output_file,
       gc_content_file = GCContent.output_file,
+      output_file = output_file
   }
 
   output {
@@ -90,18 +92,19 @@ task CombineResults {
   input {
     File sequence_length_file
     File gc_content_file
+    String output_file
   }
 
   command {
-    echo "Sequence Length Results:" > combined_results.txt
-    cat ${sequence_length_file} >> combined_results.txt
-    echo "" >> combined_results.txt
-    echo "GC Content Results:" >> combined_results.txt
-    cat ${gc_content_file} >> combined_results.txt
+    echo "Sequence Length Results:" > "${output_file}"
+    cat ${sequence_length_file} >> "${output_file}"
+    echo "" >> output_file
+    echo "GC Content Results:" >> "${output_file}"
+    cat ${gc_content_file} >> "${output_file}"
   }
 
   output {
-    File combined_file = "combined_results.txt"
+    File combined_file = "${output_file}"
   }
 
   runtime {
