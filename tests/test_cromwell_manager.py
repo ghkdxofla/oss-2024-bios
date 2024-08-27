@@ -1,4 +1,4 @@
-from core.cromwell_manager import CromwellManager
+from core.managers.cromwell_manager import CromwellManager
 
 def test_submit_workflow():
     manager = CromwellManager()
@@ -12,7 +12,7 @@ def test_get_workflow_status():
     manager = CromwellManager()
     manager.authenticate()
     response = manager.get_workflow_status('7a8ea5dd-a8ad-4845-8c9f-80bcca62bbaa')
-    assert "status" in response
+    assert "status" in response[0]
 
 
 def test_abort_workflow():

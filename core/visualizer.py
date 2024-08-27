@@ -1,4 +1,3 @@
-# cromwell_runner/visualizer.py
 import matplotlib.pyplot as plt
 
 def visualize_gc_content(gc_content_file):
