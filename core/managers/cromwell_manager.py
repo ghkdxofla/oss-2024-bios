@@ -1,4 +1,6 @@
+import json
 import os
+from io import BytesIO
 
 from cromwell_tools import api
 from cromwell_tools.cromwell_auth import CromwellAuth
@@ -10,7 +12,7 @@ load_dotenv()
 
 class CromwellManager:
     def __init__(self, cromwell_url=None, auth_options=None):
-        self.cromwell_url = cromwell_url or os.getenv("CROMWELL_URL", "http://localhost:8899")
+        self.url = cromwell_url or os.getenv("CROMWELL_URL", "http://localhost:8899")
         self.auth_options = auth_options or {}
         self.auth = None
 
@@ -19,21 +21,34 @@ class CromwellManager:
             return self.auth
 
         self.auth = CromwellAuth.from_no_authentication(
-            url=self.cromwell_url,
+            url=self.url,
         )
 
-    def submit_workflow(self, wdl_file, inputs_files=None, dependencies=None):
-        # wdl_file, inputs_files, dependencies 경로를 절대 경로로 변환
+    def submit_workflow(self, wdl_file, inputs_files=None, options_file=None, dependencies=None):
+        # TODO: wdl_file, inputs_files, options_file, dependencies 경로를 절대 경로로 변환
+        # TODO: list[dict]나 dict에 대한 변환 처리 일괄 적용
         wdl_file = convert_paths(wdl_file)
         if inputs_files:
-            inputs_files = convert_paths(inputs_files)
+            if isinstance(inputs_files, dict):
+                input_options_json = json.dumps(inputs_files)
+                inputs_files = BytesIO(input_options_json.encode('utf-8'))
+            else:
+                inputs_files = convert_paths(inputs_files)
         if dependencies:
             dependencies = convert_paths(dependencies)
+        if options_file:
+            if isinstance(options_file, dict):
+                options_json = json.dumps(options_file)
+                options_file = BytesIO(options_json.encode('utf-8'))
+            else:
+                options_file = convert_paths(options_file)
+
 
         result = api.submit(
             auth=self.auth,
             wdl_file=wdl_file,
             inputs_files=inputs_files,
+            options_file=options_file,
             dependencies=dependencies,
         )
         if result.status_code != 201:
@@ -54,10 +69,7 @@ class CromwellManager:
 
         results = result.json()
 
-        if not results.get("results"):
-            raise Exception(f"Workflow not found: {workflow_id}")
-
-        return results["results"][0]
+        return results["results"]
 
     def abort_workflow(self, workflow_id):
         result = api.abort(
