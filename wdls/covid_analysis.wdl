@@ -5,9 +5,9 @@ workflow CoronavirusAnalysis {
     File fasta_file
     File sequence_length_script
     File gc_content_script
+    File transcription_script
     File pipfile
     File pipfile_lock
-    String output_file
   }
 
   call SequenceLength {
@@ -15,7 +15,7 @@ workflow CoronavirusAnalysis {
       fasta_file = fasta_file,
       script = sequence_length_script,
       pipfile = pipfile,
-      pipfile_lock = pipfile_lock
+      pipfile_lock = pipfile_lock,
   }
 
   call GCContent {
@@ -23,18 +23,21 @@ workflow CoronavirusAnalysis {
       fasta_file = fasta_file,
       script = gc_content_script,
       pipfile = pipfile,
-      pipfile_lock = pipfile_lock
+      pipfile_lock = pipfile_lock,
   }
 
-  call CombineResults {
+  call TranscribeRNA {
     input:
-      sequence_length_file = SequenceLength.output_file,
-      gc_content_file = GCContent.output_file,
-      output_file = output_file
+      fasta_file = fasta_file,
+      script = transcription_script,
+      pipfile = pipfile,
+      pipfile_lock = pipfile_lock,
   }
 
   output {
-    File combined_results = CombineResults.combined_file
+    File sequence_length_file = SequenceLength.output_file
+    File gc_content_file = GCContent.output_file
+    File transcription_file = TranscribeRNA.output_file
   }
 }
 
@@ -88,26 +91,27 @@ task GCContent {
   }
 }
 
-task CombineResults {
+task TranscribeRNA {
   input {
-    File sequence_length_file
-    File gc_content_file
-    String output_file
+    File fasta_file
+    File script
+    File pipfile
+    File pipfile_lock
   }
 
   command {
-    echo "Sequence Length Results:" > "${output_file}"
-    cat ${sequence_length_file} >> "${output_file}"
-    echo "" >> output_file
-    echo "GC Content Results:" >> "${output_file}"
-    cat ${gc_content_file} >> "${output_file}"
+    pip install pipenv
+    cp ${pipfile} Pipfile
+    cp ${pipfile_lock} Pipfile.lock
+    pipenv install --deploy --ignore-pipfile
+    pipenv run python ${script} ${fasta_file} > transcribed_sequences.txt
   }
 
   output {
-    File combined_file = "${output_file}"
+    File output_file = "transcribed_sequences.txt"
   }
 
   runtime {
-    docker: "ubuntu:latest"
+    docker: "python:3.11-slim"
   }
 }
